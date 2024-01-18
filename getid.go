@@ -2,7 +2,6 @@ package main
 
 import (
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -10,12 +9,13 @@ import (
 func GetUserByID(c *gin.Context) {
 	id := c.Param("id")
 
-	for _, user := range students {
-		if strconv.Itoa(user.ID) == id {
-			c.JSON(http.StatusOK, user)
-			return
-		}
+	var u Students
+	err := db.QueryRow("SELECT * FROM room WHERE id = $1", id).Scan(&u.ID, &u.Username, &u.Email, &u.Mobile)
+	if err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "User not found"})
+		return
 	}
 
-	c.JSON(http.StatusNotFound, gin.H{"message": "User not found"})
+	c.JSON(http.StatusOK, u)
+
 }
