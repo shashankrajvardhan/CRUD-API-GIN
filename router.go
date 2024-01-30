@@ -17,6 +17,8 @@ func router() {
 	r.POST("/createuser", CreateUser)
 	r.PUT("/updateuser/:id", UpdateUser)
 	r.DELETE("/deleteuser/:id", DeleteUser)
+	r.GET("/name/:username", getbyname)
+	r.GET("/partial/:username", partial)
 
 	r.Run(":8080")
 }
